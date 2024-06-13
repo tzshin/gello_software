@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Tuple
-
+import json
 import numpy as np
 import tyro
 
@@ -79,6 +79,24 @@ def get_config(args: Args) -> None:
             + ", ".join([f"{int(np.round(x/(np.pi/2)))}*np.pi/2" for x in best_offsets])
             + " ]",
         )
+
+        # create a json file to record joint offsets
+        joint_offsets = [bo for bo in best_offsets]
+        script_dir = Path(__file__).parent
+        config_path = script_dir / "../gello/agents/joint_config.json"
+        config_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if config_path.exists():
+            with config_path.open("r") as f:
+                existing_data = json.load(f)
+        else:
+            existing_data = {}
+
+        existing_data["joint_offsets"] = joint_offsets
+
+        with config_path.open("w") as f:
+            json.dump(existing_data, f, indent=4)
+
         if args.gripper:
             print(
                 "gripper open (degrees)       ",
