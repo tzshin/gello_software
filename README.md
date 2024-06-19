@@ -1,6 +1,6 @@
-# Project: Teleoperation Tool for Franka Robot Arm
+# GELLO with Mods and More Instructions
 ## Introduction
-Welcome to the GitHub repository for the Teleoperation Tool for the Franka Emika robot arm. This repository provides comprehensive information on implementing the GELLO software on the Franka Emika robot arm, including various modifications and improvements we have made to enhance efficiency and user-friendliness.\
+This repository provides comprehensive information on using the GELLO with the Franka Emika robot arm, including various modifications and improvements we have made to enhance efficiency and user-friendliness.  
 **Note:** This repository is intended to be used alongside the original GELLO repository, as some necessary information can be found there.
 ## Table of Contents
 - [Motivation](#motivation)
@@ -51,6 +51,7 @@ python scripts/gello_get_offset.py
 --port /dev/serial/by-id/usb-FTDI_USB__-__Serial_Converter_FT8ISXHW-if00-port0
 ```
 2. **Original Configuration:**
+Put the arm upright, with trigger touching the arm.
 ```
 python scripts/gello_get_offset.py
 --start-joints 0 0 0 0 0 0 0
@@ -107,6 +108,13 @@ A PyGame window will appear. Press `s` to start recording data and `q` to stop. 
     - `gello/agents/gello_agent.py`
   - We automated the offset calibration process to reduce preparation time and enhance accuracy. The retrieved offset values by `scripts/gello_get_offset.py` are saved to a JSON file, which is read by `gello/agents/gello_agent.py` during startup. The bash scripts will run the offset retrieval script before starting teleoperation.
 - **Error Handling:**
-  - Improved error handling for the gripper trigger’s position to ensure successful teleoperation startup. The bash scripts allow the user to adjust the gripper trigger position and press ‘enter’ again to retry starting teleoperation.\
+  - Improved error handling for the gripper trigger’s position to ensure successful teleoperation startup. The bash interactively lets the user adjust the gripper trigger position and press ‘enter’ again to retry starting teleoperation.
+- **Software Improvements from Commit [`5561acb`](https://github.com/tzshin/gello_software/commit/5561acbda948b69182ed21209da5258feddd4493):**
+  - **Enhanced Calibration Procedure:**
+    - The new calibration procedure introduced in `scripts/gello_get_offset.py` significantly improves the precision of joint angle measurements. Changes ensure that the joint offsets are correctly updated and stored in a JSON file for seamless integration and reuse.
+  - **Gripper Sticking Issue Resolution:**
+    - The modifications in the `gello/robots/panda.py` script address the gripper sticking issue. A state-machine has been implemented to handle the gripper's grasping state, enhancing reliability during operation. This state-machine effectively manages transitions between different gripper states (free, stalled, grasping), ensuring smoother operation and preventing the gripper from stalling during critical tasks.
+- **Reference to External Polymetis Issue:**
+  - A similar gripper sticking issue was identified and discussed in a Polymetis community on GitHub, particularly in the context of using the Polymetis framework with a Franka gripper. Although the fixes proposed in [PR #1417 on the Fairo repository](https://github.com/facebookresearch/fairo/pull/1417) did not resolve the issue completely for real robots, the insights were beneficial. This PR introduced a new API, `GripperInterface.stop`, to preemptively stop the gripper to resolve sticking issues caused by previous commands. This approach is akin to strategies we've explored in our own developments with GELLO and should be considered when encountering similar issues.  
 
 By following the instructions in this README, users can efficiently set up and use the teleoperation tool for the Franka robot arm. For further information and troubleshooting, please refer to the original GELLO repository.
