@@ -1,6 +1,6 @@
 # Project: Teleoperation Tool for Franka Robot Arm
 ## Introduction
-Welcome to the GitHub repository for the Teleoperation Tool for the Franka Emika robot arm. This repository provides comprehensive information on implementing the GELLO software on the Franka Emika robot arm, including various modifications and improvements we have made to enhance efficiency and user-friendliness.
+Welcome to the GitHub repository for the Teleoperation Tool for the Franka Emika robot arm. This repository provides comprehensive information on implementing the GELLO software on the Franka Emika robot arm, including various modifications and improvements we have made to enhance efficiency and user-friendliness.\
 **Note:** This repository is intended to be used alongside the original GELLO repository, as some necessary information can be found there.
 ## Table of Contents
 - [Motivation](#motivation)
@@ -39,6 +39,11 @@ The original GELLO repository provides limited information on using GELLO’s so
 ### Manual Calibration
 The hardware consists of multiple servos acting as joint angle encoders, which require recalibration before each session. Use the following commands to calibrate the offset manually:
 1. **Recommended Initial Configuration:**
+
+<p align="left">
+  <img src="https://github.com/tzshin/gello_software/blob/main/imgs/gello_home.png" width="200">
+</p>
+
 ```
 python scripts/gello_get_offset.py
 --start-joints 0 0 0 -1.571 0 1.571 0
@@ -81,7 +86,12 @@ launch_gripper.py gripper=franka_hand
 python3 experiments/launch_nodes.py --robot panda --robot_ip="NUC’s IP address"
 ./automation/run_gello.sh
 ```
-Ensure GELLO is in the same position as the Franka arm before running the final command.
+Ensure GELLO is in the same position as the Franka arm before running the final command. The Franka robot will go to its home position after running `launch_nodes.py`.
+
+<p align="left">
+  <img src="https://github.com/tzshin/gello_software/blob/main/imgs/franka_home.png" width="200">
+</p>
+
 ## Data Collection
 To collect data, follow the steps for automatic offset calibration, but use the following command:
 ```
@@ -93,7 +103,10 @@ A PyGame window will appear. Press `s` to start recording data and `q` to stop. 
   - **Scripts:**
     - `automation/run_gello.sh`
     - `automation/run_gello_with_data_collection.sh`
-  - We automated the offset calibration process to reduce preparation time and enhance accuracy. The retrieved offset values are saved to a JSON file, which is read by `gello/agents/gello_agent.py` during startup.
+    - `scripts/gello_get_offset.py`
+    - `gello/agents/gello_agent.py`
+  - We automated the offset calibration process to reduce preparation time and enhance accuracy. The retrieved offset values by `scripts/gello_get_offset.py` are saved to a JSON file, which is read by `gello/agents/gello_agent.py` during startup. The bash scripts will run the offset retrieval script before starting teleoperation.
 - **Error Handling:**
-  - Improved error handling for the gripper trigger’s position to ensure successful teleoperation startup.
+  - Improved error handling for the gripper trigger’s position to ensure successful teleoperation startup. The bash scripts allow the user to adjust the gripper trigger position and press ‘enter’ again to retry starting teleoperation.\
+
 By following the instructions in this README, users can efficiently set up and use the teleoperation tool for the Franka robot arm. For further information and troubleshooting, please refer to the original GELLO repository.
