@@ -45,17 +45,17 @@ The hardware consists of multiple servos acting as joint angle encoders, which r
 </p>
 
 ```
-python scripts/gello_get_offset.py
---start-joints 0 0 0 -1.571 0 1.571 0
---joint-signs 1 -1 1 1 1 -1 1
+python scripts/gello_get_offset.py \
+--start-joints 0 0 0 -1.571 0 1.571 0 \
+--joint-signs 1 -1 1 1 1 -1 1 \
 --port /dev/serial/by-id/usb-FTDI_USB__-__Serial_Converter_FT8ISXHW-if00-port0
 ```
 2. **Original Configuration:**
 Put the arm upright, with trigger touching the arm.
 ```
-python scripts/gello_get_offset.py
---start-joints 0 0 0 0 0 0 0
---joint-signs 1 -1 1 1 1 -1 1
+python scripts/gello_get_offset.py \
+--start-joints 0 0 0 0 0 0 0 \
+--joint-signs 1 -1 1 1 1 -1 1 \
 --port /dev/serial/by-id/usb-FTDI_USB__-__Serial_Converter_FT8ISXHW-if00-port0
 ```
 After obtaining the offset values, update `gello/agents/gello_agent.py` with these values, including the gripper angles and port ID.
